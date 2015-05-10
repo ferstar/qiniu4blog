@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, time, sys ,ConfigParser,platform,urllib
+import os, time, platform, urllib, codecs, hashlib
 import qiniu
 from mimetypes import MimeTypes
-import sys
 import pyperclip
 from os.path import expanduser
-
+from backports import configparser
 
 homedir = expanduser("~")
-config = ConfigParser.RawConfigParser()
+config = configparser.ConfigParser()
 config.read(homedir+'/qiniu.cfg')
 mime = MimeTypes()
 
@@ -23,25 +22,27 @@ try:
     path_to_watch = config.get('config', 'path_to_watch')
     enable = config.get('custom_url','enable')
     if enable == 'false':
-        print 'custom_url not set'
+        print('custom_url not set')
     else:
         addr = config.get('custom_url','addr')
 
 
-except ConfigParser.NoSectionError, err:
-    print 'Error Config File:', err
+except ConfigParser.NoSectionError as err:
+    print('Error Config File:' + err)
 
-def setCodeingByOS():
+
+def setcodeingbyos():
     '''获取系统平台,设置编解码'''
     if 'cygwin' in platform.system().lower():
-        CODE = 'GBK'
+        code = 'GBK'
     elif os.name == 'nt' or platform.system() == 'Windows':
-        CODE = 'GBK'
+        code = 'GBK'
     elif os.name == 'mac' or platform.system() == 'Darwin':
-        CODE = 'utf-8'
+        code = 'utf-8'
     elif os.name == 'posix' or platform.system() == 'Linux':
-        CODE = 'utf-8'
-    return  CODE
+        code = 'utf-8'
+    return  code
+
 
 def set_clipboard(url_list):
 	for url in url_list:
@@ -71,14 +72,26 @@ def parseRet(retData, respInfo):
 
 def upload_without_key(bucket, filePath, uploadname):
     '''上传文件'''
+
     auth = qiniu.Auth(accessKey, secretKey)
     upToken = auth.upload_token(bucket, key=None)
+    
     key = uploadname
     retData, respInfo = qiniu.put_file(upToken, key, filePath, mime_type=mime.guess_type(filePath)[0])
     parseRet(retData, respInfo)
 
+
+def getkey(filename):
+    ext = filename[filename.rfind('.'):]
+    hash = hashlib.md5()
+    hash.update(codecs.encode(filename, setcodeingbyos()))
+    md5 = hash.hexdigest()
+    remote = 'image/'+md5[0:1]+'/'+md5[1:3]+'/'+md5[3:]+ext
+    return remote
+
+
 def main():
-    print "running ... ..."
+    print("running ... ...")
     before = dict([(f, None) for f in os.listdir(path_to_watch)])
     while 1:
         time.sleep(1)
@@ -86,30 +99,33 @@ def main():
         added = [f for f in after if not f in before]
         removed = [f for f in before if not f in after]
         if added:
-            print "Added Files: ", ", ".join(added)
+            print("Added Files: " + ", ".join(added))
             # print added
             url_list = []
+
             for i in added:
-                upload_without_key(bucket, os.path.join(path_to_watch, i), i.decode(setCodeingByOS()))
+                filekey = getkey(i)
+
+                upload_without_key(bucket, os.path.join(path_to_watch, i), filekey)
                 if enable == 'true':
-                    url = addr + urllib.quote(i.decode(setCodeingByOS()).encode('utf-8'))
+                    url = addr + urllib.parse.quote(filekey)
                 else:
-                    url = 'http://' + bucket + '.qiniudn.com/' + urllib.quote(i.decode(setCodeingByOS()).encode('utf-8'))
+                    url = 'http://' + bucket + '.qiniudn.com/' + urllib.parse.quote(filekey)
                 url_list.append(url)
 
             with open('image_markdown.txt', 'a') as f:
                 for url in url_list:
                     image = '![' + url + ']' + '(' + url + ')' + '\n'
                     f.write(image)
-            print "image url [markdown] is save in image_markdwon.txt"
+            print("image url [markdown] is save in image_markdwon.txt")
 
             set_clipboard(url_list)
         if removed:
-            print "Removed Files: ", ", ".join(removed)
-            print  removed
+            print("Removed Files: " + ", ".join(removed))
+            print(removed)
         before = after
 
 if __name__ == "__main__":
-	main()
+    main()
 
 
