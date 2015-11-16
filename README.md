@@ -1,9 +1,13 @@
 ##python3中的修改内容
 
 此版本是对文件上传到七牛的key进行了修改，修改后的key格式为：
-文件类型/年/月/**原文件**进行md5值.文件类型，如
+
+`文件类型/年/月/原文件的md5值.文件类型`，如
+
 `png/2015/11/cd3c25b07c417cfe2921c16a122a4363.png`
+
 另外在之后生成的`image_markdown.txt`文本中，将资源链接以如下`md`的格式写入`![文件名](七牛对应链接)`，如:
+
 ```
 ![DeepinScrot-5621.png](http://7xivdp.com1.z0.glb.clouddn.compng/2015/11/cd3c25b07c417cfe2921c16a122a4363.png)
 ```
