@@ -1,18 +1,17 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
-import os, time, platform, urllib, codecs, hashlib
+import os, time, datetime, platform, urllib, hashlib
 import qiniu
 from mimetypes import MimeTypes
 import pyperclip
 from os.path import expanduser
-from backports import configparser
+import configparser
 
 homedir = expanduser("~")
 config = configparser.ConfigParser()
 config.read(homedir+'/qiniu.cfg')
 mime = MimeTypes()
-
+now = datetime.datetime.now()
 
 
 try:
@@ -83,10 +82,10 @@ def upload_without_key(bucket, filePath, uploadname):
 
 def getkey(filename):
     ext = filename[filename.rfind('.'):]
-    hash = hashlib.md5()
-    hash.update(codecs.encode(filename, setcodeingbyos()))
-    md5 = hash.hexdigest()
-    remote = 'image/'+md5[0:1]+'/'+md5[1:3]+'/'+md5[3:]+ext
+    file_path = path_to_watch + '/' + filename
+    md5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+    # remote url: filetype/year/month/md5.filetype
+    remote = ext[1:] + '/' + str(now.year) + '/' + str(now.month) + '/' + md5 + ext
     return remote
 
 
@@ -100,7 +99,7 @@ def main():
         removed = [f for f in before if not f in after]
         if added:
             print("Added Files: " + ", ".join(added))
-            # print added
+            # print(added)
             url_list = []
 
             for i in added:
@@ -115,7 +114,7 @@ def main():
 
             with open('image_markdown.txt', 'a') as f:
                 for url in url_list:
-                    image = '![' + url + ']' + '(' + url + ')' + '\n'
+                    image = '![' + added[0] + ']' + '(' + url + ')' + '\n'
                     f.write(image)
             print("image url [markdown] is save in image_markdwon.txt")
 
