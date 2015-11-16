@@ -1,7 +1,13 @@
 ##python3中的修改内容
-首先，需要安装configparser，否则代码无法使用。读取配置文件的在python3中有ConfigParser改成了configparser,需要安装。
 
-此版本的修改，将上传到七牛上面是文件的key进行了修改，对原文件名进行md5之后，对md5之后的文件名进行截取和拼装组成了存到七牛的key，组成之后是类似image/0/25/13e20badc41e1f72176ce31aaf4a0.jpg这种文件名。
+此版本是对文件上传到七牛的key进行了修改，修改后的key格式为：
+文件类型/年/月/**原文件**进行md5值.文件类型，如
+`png/2015/11/cd3c25b07c417cfe2921c16a122a4363.png`
+另外在之后生成的`image_markdown.txt`文本中，将资源链接以如下`md`的格式写入`![文件名](七牛对应链接)`，如:
+```
+![DeepinScrot-5621.png](http://7xivdp.com1.z0.glb.clouddn.compng/2015/11/cd3c25b07c417cfe2921c16a122a4363.png)
+```
+
 
 > 另外需要注意的是，在启动qiniu4blog之前，监视的文件夹中已经存在的文件，是不会上传到七牛的。所以使用FastStone Capture的自动保存截图之前需要先启动监控服务。若有已经存在的文件（不是通过FastStone Capture自动保存的截图）需要上传，建议先拷贝出去后在启动qiniu4blog之后，再拷贝到监控目录。
 
