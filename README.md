@@ -12,6 +12,9 @@
 ![DeepinScrot-5621.png](http://7xivdp.com1.z0.glb.clouddn.compng/2015/11/cd3c25b07c417cfe2921c16a122a4363.png)
 ```
 
+可能会遇到`“Pyperclip could not find a copy/paste mechanism for your system. Please see https://pyperclip.readthedocs.org for how to fix this.”`的错误，可以参考下面的链接解决：
+
+<http://pyperclip.readthedocs.org/en/latest/introduction.html>
 
 > 另外需要注意的是，在启动qiniu4blog之前，监视的文件夹中已经存在的文件，是不会上传到七牛的。所以使用FastStone Capture的自动保存截图之前需要先启动监控服务。若有已经存在的文件（不是通过FastStone Capture自动保存的截图）需要上传，建议先拷贝出去后在启动qiniu4blog之后，再拷贝到监控目录。
 
