@@ -1,4 +1,4 @@
-## python3中的修改内容
+## Python 3.x Only
 
 此版本是对文件上传到七牛的key进行了修改，修改后的key格式为：
 
@@ -19,7 +19,7 @@
 <http://pyperclip.readthedocs.org/en/latest/introduction.html>
 
 ## 使用方法
-Python 3.x Only
+
 ```shell
 pip install qiniu pyperclip watchdog
 # 随便放哪, 有执行权限就行, qiniu.cfg与qiniu4blog.py务必要放在一起
