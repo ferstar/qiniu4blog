@@ -26,6 +26,9 @@ pip install qiniu pyperclip watchdog
 # 随便放哪, 有执行权限就行, qiniu.cfg与qiniu4blog.py务必要放在一起
 python qiniu4blog.py [dir_to_watch]
 ```
+## 演示
+> gif录制软件: [LICEcap](https://www.cockos.com/licecap/)
+![演示](test.gif)
 
 ## 注意
 1. `qiniu.cfg`最后一行自定义`url`别忘了形如`addr = http://7qnct6.com1.z0.glb.clouddn.com/`后面的斜杠`/`
