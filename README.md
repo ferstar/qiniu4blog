@@ -1,4 +1,4 @@
-##python3中的修改内容
+## python3中的修改内容
 
 此版本是对文件上传到七牛的key进行了修改，修改后的key格式为：
 
@@ -18,11 +18,17 @@
 
 <http://pyperclip.readthedocs.org/en/latest/introduction.html>
 
-## 安装方法
-`python3 setup.py install`
+## 使用方法
+Python 3.x Only
+```shell
+pip install qiniu pyperclip watchdog
+# 随便放哪, 有执行权限就行, qiniu.cfg与qiniu4blog.py务必要放在一起
+python qiniu4blog.py [dir_to_watch]
+```
 
 ## 注意
-`qiniu4blog/qiniu.cfg`最后一行自定义`url`别忘了形如`addr = http://7qnct6.com1.z0.glb.clouddn.com/`后面的斜杠`/`
-
+1. `qiniu.cfg`最后一行自定义`url`别忘了形如`addr = http://7qnct6.com1.z0.glb.clouddn.com/`后面的斜杠`/`
+2. 支持七牛云新出的图片样式(原图保护), 假如你的图片样式名称为`/xyz`, 可以在`qiniu.cfg`中添加
+3. Windows10 / Ubuntu 16.04测试可用, macOS未测试
 ---
 原版readme链接:<https://github.com/wzyuliyang/qiniu4blog/blob/master/README.md>
