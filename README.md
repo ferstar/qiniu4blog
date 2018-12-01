@@ -1,3 +1,5 @@
+转用腾讯COS了, 配合[PicGo](https://molunerfinn.com/PicGo/)使用, 爽歪歪
+
 ## Python 3.x Only
 
 此版本是对文件上传到七牛的key进行了修改，修改后的key格式为：
